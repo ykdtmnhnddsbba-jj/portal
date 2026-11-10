@@ -12,7 +12,7 @@
 :root{
   /* layout: centered column, one large link card per 手帖, two across on desktop and stacked on phone */
   --bg:#f3f4f8; --surface:#ffffff; --text:#1c2033; --muted:#5d6480; --line:#dfe2ee;
-  --game:#3b5bdb; --anime:#d6336c; --eiga:#b45309; --nazo:#c77700; --lib:#0b7a6d; --trip:#2f6f6a; --on:#ffffff;
+  --game:#3b5bdb; --anime:#d6336c; --eiga:#b45309; --nazo:#c77700; --lib:#0b7a6d; --trip:#2f6f6a; --home:#d92d55; --on:#ffffff;
   --font-display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
   --font-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
   color-scheme:light;
@@ -20,12 +20,12 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#12141d; --surface:#1c2030; --text:#eceefa; --muted:#a0a7c4; --line:#2e3450;
-    --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --on:#12141d; color-scheme:dark;
+    --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --on:#12141d; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#12141d; --surface:#1c2030; --text:#eceefa; --muted:#a0a7c4; --line:#2e3450;
-  --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --on:#12141d; color-scheme:dark;
+  --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --on:#12141d; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6}
@@ -42,7 +42,7 @@ h1{font-family:var(--font-display);font-size:1.7rem;margin:0 0 4px;text-wrap:bal
 .open{display:block;text-align:center;text-decoration:none;font-weight:700;padding:14px 16px;border-radius:10px;background:var(--c);color:var(--on)}
 .open:hover{filter:brightness(1.08)}
 .repo{font-size:.8rem;color:var(--muted);text-align:center}
-.game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)}
+.game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)} .home{--c:var(--home)}
 :focus-visible{outline:3px solid var(--text);outline-offset:3px}
 footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 </style>
@@ -50,7 +50,7 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 <body>
 <main class="wrap">
   <h1>手帖ポータル</h1>
-  <p class="lead">ゲーム、アニメ、映画・ドラマ、謎解き、読書（図書館）、旅行のサイトへの入口です。</p>
+  <p class="lead">ゲーム、アニメ、映画・ドラマ、謎解き、読書（図書館）、旅行、家族のサイトへの入口です。</p>
   <section class="group"><h2 class="gh">記録の手帖</h2>
   <div class="grid">
     <article class="card game">
@@ -96,6 +96,15 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
       <h2>しおり編集室</h2>
       <p>しおりの作成・修正・削除をします。カレンダーから骨子を作れます。公開サイトへの反映もここから依頼します（自分用・Claudeへのログインが必要）。</p>
       <a class="open" href="https://claude.ai/artifact/AuUuznAmmUTQKhDZxEA719">しおり編集室を開く</a>
+    </article>
+  </div></section>
+  <section class="group"><h2 class="gh">家族</h2>
+  <div class="grid">
+    <article class="card home">
+      <h2>HOME✦MISSION</h2>
+      <p>家族のルーティーンとToDoを管理して、担当者のスマホに通知します。完了するまで再通知し、家族の完了状況も一覧で見られます。</p>
+      <a class="open" href="https://ykdtmnhnddsbba-jj.github.io/kazoku-todo/" target="_blank" rel="noopener noreferrer">HOME✦MISSIONを開く</a>
+      <a class="repo" href="https://github.com/ykdtmnhnddsbba-jj/kazoku-todo" target="_blank" rel="noopener noreferrer">GitHub</a>
     </article>
   </div></section>
   <footer>スマホではこのページをホーム画面に追加すると、1タップで各サイトへ移動できます。</footer>
