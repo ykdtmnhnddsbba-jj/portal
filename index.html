@@ -12,7 +12,7 @@
 :root{
   /* layout: centered column, one large link card per 手帖, two across on desktop and stacked on phone */
   --bg:#f3f4f8; --surface:#ffffff; --text:#1c2033; --muted:#5d6480; --line:#dfe2ee;
-  --game:#3b5bdb; --anime:#d6336c; --eiga:#b45309; --nazo:#c77700; --lib:#0b7a6d; --trip:#2f6f6a; --home:#d92d55; --hon:#6741d9; --on:#ffffff;
+  --game:#3b5bdb; --anime:#d6336c; --eiga:#b45309; --nazo:#c77700; --lib:#0b7a6d; --trip:#2f6f6a; --home:#d92d55; --hon:#6741d9; --ham:#4d7c0f; --on:#ffffff;
   --font-display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
   --font-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
   color-scheme:light;
@@ -20,12 +20,12 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#12141d; --surface:#1c2030; --text:#eceefa; --muted:#a0a7c4; --line:#2e3450;
-    --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --on:#12141d; color-scheme:dark;
+    --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --ham:#a3e635; --on:#12141d; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#12141d; --surface:#1c2030; --text:#eceefa; --muted:#a0a7c4; --line:#2e3450;
-  --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --on:#12141d; color-scheme:dark;
+  --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --ham:#a3e635; --on:#12141d; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6}
@@ -42,7 +42,7 @@ h1{font-family:var(--font-display);font-size:1.7rem;margin:0 0 4px;text-wrap:bal
 .open{display:block;text-align:center;text-decoration:none;font-weight:700;padding:14px 16px;border-radius:10px;background:var(--c);color:var(--on)}
 .open:hover{filter:brightness(1.08)}
 .repo{font-size:.8rem;color:var(--muted);text-align:center}
-.game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)} .home{--c:var(--home)} .hon{--c:var(--hon)}
+.game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)} .home{--c:var(--home)} .hon{--c:var(--hon)} .ham{--c:var(--ham)}
 :focus-visible{outline:3px solid var(--text);outline-offset:3px}
 footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 </style>
@@ -111,6 +111,12 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
       <p>家族のルーティーンとToDoを管理して、担当者のスマホに通知します。完了するまで再通知し、家族の完了状況も一覧で見られます。</p>
       <a class="open" href="https://ykdtmnhnddsbba-jj.github.io/kazoku-todo/" target="_blank" rel="noopener noreferrer">HOME✦MISSIONを開く</a>
       <a class="repo" href="https://github.com/ykdtmnhnddsbba-jj/kazoku-todo" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </article>
+    <article class="card ham">
+      <h2>ハムスター手帖</h2>
+      <p>部屋の掃除と大掃除の前回日・次回日を管理します。周期から次回日を自動計算し、手でも直せます。Googleカレンダーへの登録もできます。</p>
+      <a class="open" href="https://ykdtmnhnddsbba-jj.github.io/hamster-techo/" target="_blank" rel="noopener noreferrer">ハムスター手帖を開く</a>
+      <a class="repo" href="https://github.com/ykdtmnhnddsbba-jj/hamster-techo" target="_blank" rel="noopener noreferrer">GitHub</a>
     </article>
     <article class="card home">
       <h2>車、ちょっと借ります</h2>
