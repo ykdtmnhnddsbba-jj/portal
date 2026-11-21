@@ -44,6 +44,16 @@ h1{font-family:var(--font-display);font-size:1.7rem;margin:0 0 4px;text-wrap:bal
 .repo{font-size:.8rem;color:var(--muted);text-align:center}
 .nikki{--c:#c2410c} .game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)} .home{--c:var(--home)} .hon{--c:var(--hon)} .ham{--c:var(--ham)}
 :focus-visible{outline:3px solid var(--text);outline-offset:3px}
+.today{margin:0 0 28px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.today[hidden]{display:none}
+.today h2{font-family:var(--font-display);font-size:1.05rem;margin:0 0 10px}
+.tlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.tlist li{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tlist .tag{flex:0 0 auto;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--c);color:var(--on)}
+.tlist a{color:var(--text);text-decoration:none;border-bottom:1px dashed var(--line)}
+.tlist .when{color:var(--muted);font-size:.88rem}
+.tlist .warn{color:var(--home);font-weight:700}
+.today .note{margin:10px 0 0;font-size:.78rem;color:var(--muted)}
 footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 </style>
 </head>
@@ -51,6 +61,11 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 <main class="wrap">
   <h1>手帖ポータル</h1>
   <p class="lead">ゲーム（記録・攻略）、アニメ、映画・ドラマ、謎解き、読書（図書館・本の売買）、旅行、家族のサイトへの入口です。</p>
+  <section class="today" id="today" hidden aria-labelledby="todayH">
+    <h2 id="todayH">今日のまとめ</h2>
+    <ul class="tlist" id="tlist"></ul>
+    <p class="note">この端末で開いたことのある手帖の記録から作っています（ログイン不要。どこにも送りません）。</p>
+  </section>
   <section class="group"><h2 class="gh">記録の手帖</h2>
   <div class="grid">
     <article class="card game">
@@ -91,7 +106,7 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
     </article>
     <article class="card hon">
       <h2>本の手帖</h2>
-      <p>会社の書籍補助で買うIT・ビジネス書を、メルカリで売ったときの実質負担が小さい順に選べます。購入・売却の記録と収支も管理します。</p>
+      <p>会社の書籍補助で買うIT・ビジネス書を、メルカリで売ったときの実質負担が小さい順に選べます。買った本を月ごとに記録し、補助の残り枠も確認できます。</p>
       <a class="open" href="https://ykdtmnhnddsbba-jj.github.io/hon-techo/" target="_blank" rel="noopener noreferrer">本の手帖を開く</a>
       <a class="repo" href="https://github.com/ykdtmnhnddsbba-jj/hon-techo" target="_blank" rel="noopener noreferrer">GitHub</a>
     </article>
@@ -137,5 +152,83 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
   </div></section>
   <footer>スマホではこのページをホーム画面に追加すると、1タップで各サイトへ移動できます。</footer>
 </main>
+<script>
+/* 今日のまとめ：手帖はすべて同じドメイン（ykdtmnhnddsbba-jj.github.io）なので、各手帖が localStorage に保存した記録をそのまま読める。
+   読むだけで書き込まない。データ形式が変わっても全体が止まらないよう、手帖ごとに try で包む。 */
+(function(){
+  const BASE='https://ykdtmnhnddsbba-jj.github.io/';
+  const get=k=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}};
+  const pad=n=>String(n).padStart(2,'0');
+  const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12)};
+  const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return ymd(d)};
+  const nthWeekday=(y,m,nth,wd)=>{const f=new Date(y,m,1,12).getDay();return ymd(new Date(y,m,1+((wd-f+7)%7)+7*(nth-1),12))};
+  const today=ymd(new Date());
+  const diff=s=>Math.round((parse(s)-parse(today))/864e5);
+  const WD='日月火水木金土';
+  const md=s=>{const d=parse(s);return (d.getMonth()+1)+'/'+d.getDate()+'('+WD[d.getDay()]+')'};
+  const when=s=>{const n=diff(s);return n===0?'<span class="warn">今日</span>':n===1?'明日':n>0?'あと'+n+'日':'<span class="warn">'+(-n)+'日過ぎ</span>'};
+  const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const rows=[];
+  const add=(cls,tag,url,title,date,extra)=>rows.push({date:date||'9999-99-99',html:`<li class="${cls}"><span class="tag">${tag}</span><a href="${BASE+url}" target="_blank" rel="noopener noreferrer">${esc(title)}</a><span class="when">${date?md(date)+' '+when(date):''}${extra?' '+esc(extra):''}</span></li>`});
+
+  /* ハムスター手帖：7日以内（と過ぎたもの）の掃除日。計算はハムスター手帖の nextInfo と同じ */
+  try{
+    const db=get('hamsterdb.v1');
+    if(db&&db.events){
+      const raw=db.config||{},c=Object.assign({room_days:7,big_nth:1,big_weekday:4,big_counts_as_room:true},raw);
+      const ev=Object.values(db.events).filter(e=>e&&!e.deleted&&e.date).sort((a,b)=>a.date<b.date?1:-1);
+      const last=k=>{const t=(k==='room'&&c.big_counts_as_room)?['room','big']:[k];const e=ev.find(e=>t.includes(e.type));return e?e.date:null};
+      [['room','部屋の掃除'],['big','大掃除']].forEach(([k,label])=>{
+        const l=last(k);let next=null;
+        if(l){if(k==='room')next=addDays(l,c.room_days);
+          else if(raw.big_nth==null&&raw.big_days)next=addDays(l,raw.big_days);
+          else{const d=parse(l);next=nthWeekday(d.getFullYear(),d.getMonth()+1,c.big_nth,c.big_weekday)}}
+        const ov=db.next_override&&db.next_override[k];if(ov&&ov.date&&(!l||ov.date>l))next=ov.date;
+        if(next&&diff(next)<=7)add('ham','ハムスター','hamster-techo/',label,next);
+      });
+    }
+  }catch(e){console.warn('hamster',e)}
+
+  /* 謎解き手帖：30日以内の予定 */
+  try{
+    const db=get('nazotokidb.v1');
+    if(db&&db.records)Object.values(db.records).filter(r=>r&&!r.deleted&&r.status==='plan'&&/^\d{4}-\d{2}-\d{2}$/.test(r.date||'')&&r.date>=today&&diff(r.date)<=30)
+      .forEach(r=>add('nazo','謎解き','nazotoki-techo/',r.title,r.date,r.time||''));
+  }catch(e){console.warn('nazo',e)}
+
+  /* ゲーム手帖：☆気になる（未プレイ・未評価）で、発売が30日以内 */
+  try{
+    const db=get('gamedb.v1');
+    if(db&&db.ratings)Object.values(db.ratings).filter(r=>r&&!r.deleted&&r.want&&!r.played&&!(r.score>0)&&/^\d{4}-\d{2}-\d{2}$/.test(r.release||'')&&r.release>=today&&diff(r.release)<=30)
+      .forEach(r=>add('game','ゲーム','game-techo/',r.title+' 発売',r.release));
+  }catch(e){console.warn('game',e)}
+
+  /* 本の手帖：今月の書籍補助の残り枠 */
+  try{
+    const db=get('hondb.v1'),st=get('hondb.settings.v1')||{};
+    if(db&&db.purchases){
+      const budget=+((st.cfg||{}).budget)||10000,ym=today.slice(0,7);
+      const sp=Object.values(db.purchases).filter(p=>p&&!p.deleted&&String(p.bought_at||'').slice(0,7)===ym).reduce((s,p)=>s+(+p.price_paid||0),0);
+      rows.push({date:'9999-99-98',html:`<li class="hon"><span class="tag">本</span><a href="${BASE}hon-techo/" target="_blank" rel="noopener noreferrer">今月の書籍補助</a><span class="when">残り ${Math.max(0,budget-sp).toLocaleString('ja-JP')}円 / ${budget.toLocaleString('ja-JP')}円</span></li>`});
+    }
+  }catch(e){console.warn('hon',e)}
+
+  const show=()=>{
+    if(!rows.length)return;
+    rows.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+    document.getElementById('tlist').innerHTML=rows.map(r=>r.html).join('');
+    document.getElementById('today').hidden=false;
+  };
+  show();
+
+  /* 旅のしおり：60日以内の旅（公開データなので fetch） */
+  fetch(BASE+'tabi-shiori/trips/index.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(list=>{
+    (Array.isArray(list)?list:[]).filter(t=>t&&!t.sample&&t.start&&(t.end||t.start)>=today&&diff(t.start)<=60)
+      .forEach(t=>add('trip','旅','tabi-shiori/',t.title,t.start>=today?t.start:today));
+    show();
+  }).catch(()=>{});
+})();
+</script>
 </body>
 </html>
