@@ -12,7 +12,7 @@
 :root{
   /* layout: centered column, one large link card per 手帖, two across on desktop and stacked on phone */
   --bg:#f3f4f8; --surface:#ffffff; --text:#1c2033; --muted:#5d6480; --line:#dfe2ee;
-  --game:#3b5bdb; --anime:#d6336c; --eiga:#b45309; --nazo:#c77700; --lib:#0b7a6d; --trip:#2f6f6a; --home:#d92d55; --hon:#6741d9; --ham:#4d7c0f; --on:#ffffff;
+  --game:#3b5bdb; --anime:#d6336c; --eiga:#b45309; --nazo:#c77700; --lib:#0b7a6d; --trip:#2f6f6a; --home:#d92d55; --hon:#6741d9; --ham:#4d7c0f; --yari:#c2410c; --on:#ffffff;
   --font-display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
   --font-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
   color-scheme:light;
@@ -20,12 +20,12 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#12141d; --surface:#1c2030; --text:#eceefa; --muted:#a0a7c4; --line:#2e3450;
-    --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --ham:#a3e635; --on:#12141d; color-scheme:dark;
+    --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --ham:#a3e635; --yari:#ff9a5c; --on:#12141d; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#12141d; --surface:#1c2030; --text:#eceefa; --muted:#a0a7c4; --line:#2e3450;
-  --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --ham:#a3e635; --on:#12141d; color-scheme:dark;
+  --game:#8ea2ff; --anime:#ff8fb7; --eiga:#ffb347; --nazo:#ffbf4d; --lib:#5eead4; --trip:#7fd6c8; --home:#ff8fa3; --hon:#b197fc; --ham:#a3e635; --yari:#ff9a5c; --on:#12141d; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6}
@@ -42,7 +42,7 @@ h1{font-family:var(--font-display);font-size:1.7rem;margin:0 0 4px;text-wrap:bal
 .open{display:block;text-align:center;text-decoration:none;font-weight:700;padding:14px 16px;border-radius:10px;background:var(--c);color:var(--on)}
 .open:hover{filter:brightness(1.08)}
 .repo{font-size:.8rem;color:var(--muted);text-align:center}
-.nikki{--c:#c2410c} .game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)} .home{--c:var(--home)} .hon{--c:var(--hon)} .ham{--c:var(--ham)}
+.nikki{--c:#c2410c} .game{--c:var(--game)} .anime{--c:var(--anime)} .eiga{--c:var(--eiga)} .nazo{--c:var(--nazo)} .lib{--c:var(--lib)} .trip{--c:var(--trip)} .home{--c:var(--home)} .hon{--c:var(--hon)} .ham{--c:var(--ham)} .yari{--c:var(--yari)}
 :focus-visible{outline:3px solid var(--text);outline-offset:3px}
 .today{margin:0 0 28px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
 .today[hidden]{display:none}
@@ -60,7 +60,7 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 <body>
 <main class="wrap">
   <h1>手帖ポータル</h1>
-  <p class="lead">ゲーム（記録・攻略）、アニメ、映画・ドラマ、謎解き、読書（図書館・本の売買）、旅行、家族のサイトへの入口です。</p>
+  <p class="lead">ゲーム（記録・攻略）、アニメ、映画・ドラマ、謎解き、読書（図書館・本の売買）、旅行、家族、やりたいことのサイトへの入口です。</p>
   <section class="today" id="today" hidden aria-labelledby="todayH">
     <h2 id="todayH">今日のまとめ</h2>
     <ul class="tlist" id="tlist"></ul>
@@ -114,6 +114,15 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
       <h2>脳トレ日記</h2>
       <p>毎日の日記を音声入力で書けます。ごはんの思い出しクイズ、3つの良いこと、運動の記録つき。カレンダーと検索で見返せます（自分用）。</p>
       <a class="open" href="https://claude.ai/artifact/6Dhvpq4zhymGbLnAnjD8Bp" target="_blank" rel="noopener noreferrer">脳トレ日記を開く</a>
+    </article>
+  </div></section>
+  <section class="group"><h2 class="gh">自分</h2>
+  <div class="grid">
+    <article class="card yari">
+      <h2>やりたいこと手帖</h2>
+      <p>やりたいことを短期・中期・長期・毎日の習慣に分けて管理します。スマホからすぐメモでき、習慣は毎日チェックして連続日数を確認できます。Claudeプロジェクトの指示文もコピーできます。</p>
+      <a class="open" href="https://ykdtmnhnddsbba-jj.github.io/yaritai-techo/" target="_blank" rel="noopener noreferrer">やりたいこと手帖を開く</a>
+      <a class="repo" href="https://github.com/ykdtmnhnddsbba-jj/yaritai-techo" target="_blank" rel="noopener noreferrer">GitHub</a>
     </article>
   </div></section>
   <section class="group"><h2 class="gh">旅行</h2>
@@ -213,6 +222,16 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
       rows.push({date:'9999-99-98',html:`<li class="hon"><span class="tag">本</span><a href="${BASE}hon-techo/" target="_blank" rel="noopener noreferrer">今月の書籍補助</a><span class="when">残り ${Math.max(0,budget-sp).toLocaleString('ja-JP')}円 / ${budget.toLocaleString('ja-JP')}円</span></li>`});
     }
   }catch(e){console.warn('hon',e)}
+
+  /* やりたいこと手帖：今日まだチェックしていない毎日の習慣 */
+  try{
+    const db=get('yaritaidb.v1');
+    if(db&&db.items){
+      const hs=Object.values(db.items).filter(i=>i&&!i.deleted&&i.horizon==='daily'&&i.status!=='pause'&&i.status!=='done');
+      const left=hs.filter(h=>{const c=(db.checks||{})[h.id+'|'+today];return !(c&&c.v)});
+      if(hs.length)rows.push({date:'9999-99-97',html:`<li class="yari"><span class="tag">習慣</span><a href="${BASE}yaritai-techo/" target="_blank" rel="noopener noreferrer">${left.length?'今日まだ: '+esc(left.map(h=>h.title).join('・')):'今日の習慣はぜんぶ済み'}</a><span class="when">${hs.length-left.length}/${hs.length}</span></li>`});
+    }
+  }catch(e){console.warn('yari',e)}
 
   const show=()=>{
     if(!rows.length)return;
