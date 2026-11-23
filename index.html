@@ -60,7 +60,7 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
 <body>
 <main class="wrap">
   <h1>手帖ポータル</h1>
-  <p class="lead">ゲーム（記録・攻略）、アニメ、映画・ドラマ、謎解き、読書（図書館・本の売買）、旅行、家族、やりたいことのサイトへの入口です。</p>
+  <p class="lead">ゲーム（記録・攻略）、アニメ、映画・ドラマ、謎解き、読書（図書館・本の売買）、おでかけ・旅行、家族、やりたいことのサイトへの入口です。</p>
   <section class="today" id="today" hidden aria-labelledby="todayH">
     <h2 id="todayH">今日のまとめ</h2>
     <ul class="tlist" id="tlist"></ul>
@@ -139,6 +139,12 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
   </div></section>
   <section class="group"><h2 class="gh">旅行</h2>
   <div class="grid">
+    <article class="card trip">
+      <h2>おでかけ手帖</h2>
+      <p>行きたい旅行先・イベントをメモしておく手帖です。3ヵ月以内で予定が入っていないものを知らせ、「カレンダーに追加」で予定ありの印を付けられます。</p>
+      <a class="open" href="https://ykdtmnhnddsbba-jj.github.io/odekake-techo/" target="_blank" rel="noopener noreferrer">おでかけ手帖を開く</a>
+      <a class="repo" href="https://github.com/ykdtmnhnddsbba-jj/odekake-techo" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </article>
     <article class="card trip">
       <h2>旅のしおり</h2>
       <p>家族旅行の行程表です。日別のタイムライン、チケット、Googleマップの経路、持ち物チェックを見られます。</p>
@@ -244,6 +250,26 @@ footer{margin-top:28px;font-size:.8rem;color:var(--muted)}
       if(hs.length)rows.push({date:'9999-99-97',html:`<li class="yari"><span class="tag">習慣</span><a href="${BASE}yaritai-techo/" target="_blank" rel="noopener noreferrer">${left.length?'今日まだ: '+esc(left.map(h=>h.title).join('・')):'今日の習慣はぜんぶ済み'}</a><span class="when">${hs.length-left.length}/${hs.length}</span></li>`});
     }
   }catch(e){console.warn('yari',e)}
+
+  /* おでかけ手帖：3ヵ月以内に行ける時期なのに予定が入っていないもの（終わりが近い順）と、30日以内の締切。
+     時期の計算はおでかけ手帖の win() と同じ（毎年のものは過ぎていたら翌年に送る） */
+  try{
+    const db=get('odekakedb.v1');
+    if(db&&db.items){
+      const isD=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'');
+      const addY=(s,n)=>{const [y,m,d]=s.split('-').map(Number);const last=new Date(y+n,m,0).getDate();return (y+n)+'-'+pad(m)+'-'+pad(Math.min(d,last))};
+      const h3=(()=>{const d=parse(today);d.setMonth(d.getMonth()+3);return ymd(d)})();
+      const win=it=>{let f=isD(it.from)?it.from:(isD(it.to)?it.to:null),t=isD(it.to)?it.to:f;if(!f)return null;if(f>t)[f,t]=[t,f];
+        if(it.yearly){let n=0;while(t<today&&n<50){f=addY(f,1);t=addY(t,1);n++}}return {f,t}};
+      const items=Object.values(db.items).filter(i=>i&&!i.deleted&&i.status==='want');
+      const soon=items.filter(i=>!(i.plan&&isD(i.plan.start))).map(i=>({i,w:win(i)})).filter(x=>x.w&&x.w.t>=today&&x.w.f<=h3).sort((a,b)=>a.w.t<b.w.t?-1:1);
+      soon.slice(0,6).forEach(({i,w})=>{const n=diff(w.t);
+        rows.push({date:w.t,html:`<li class="trip"><span class="tag">おでかけ</span><a href="${BASE}odekake-techo/" target="_blank" rel="noopener noreferrer">${esc(i.title)}</a><span class="when">${w.f>today?md(w.f)+'〜':''}${md(w.t)}・予定なし${n<=14?' <span class="warn">あと'+n+'日で終わる</span>':''}</span></li>`})});
+      if(soon.length>6)rows.push({date:soon[6].w.t,html:`<li class="trip"><span class="tag">おでかけ</span><a href="${BASE}odekake-techo/" target="_blank" rel="noopener noreferrer">ほか${soon.length-6}件、予定が入っていない</a></li>`});
+      items.filter(i=>!i.deadline_done&&isD(i.deadline)&&diff(i.deadline)>=0&&diff(i.deadline)<=30)
+        .forEach(i=>add('trip','締切','odekake-techo/',i.title+'（'+(i.deadline_label||'締切')+'）',i.deadline));
+    }
+  }catch(e){console.warn('odekake',e)}
 
   const show=()=>{
     if(!rows.length)return;
